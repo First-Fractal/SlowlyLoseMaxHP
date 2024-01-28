@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 
 namespace SlowlyLoseMaxHP
 {
-
     public class SLMHPlayer : ModPlayer
     {
         //vars for counting down the cooldown for losing max hp
@@ -31,7 +30,7 @@ namespace SlowlyLoseMaxHP
                     Player.ConsumedLifeFruit--;
 
                     //tell the player that they just lost 20 max hp
-                    CombatText.NewText(new Rectangle((int)Player.position.X, (int)Player.position.Y, 20, 20), Color.Red, "You just lost 20 max HP!");
+                    CombatText.NewText(new Rectangle((int)Player.position.X, (int)Player.position.Y, 20, 20), Color.Yellow, "You just lost 20 max HP!");
                 }
                 //check if the player has one life crystal
                 else if (Player.ConsumedLifeCrystals > 0)
