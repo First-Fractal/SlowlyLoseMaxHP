@@ -6,19 +6,25 @@ namespace SlowlyLoseMaxHP
 {
     internal class SLMHPlayer : ModPlayer
     {
-        static int timerMax = ffFunc.TimeToTick(10);
-        static int timer = timerMax;
+        //vars for counting down the cooldown for losing max hp
+        static int cooldownMax = ffFunc.TimeToTick(10);
+        static int cooldown = cooldownMax;
 
+        //vars for counting down the cooldown for losing max hp
         public override void PostUpdate()
         {
-            if (timer > 0)
+            //count down the cooldown
+            if (cooldown > 0)
             {
-                timer--;
-                Console.WriteLine(timer);
+                cooldown--;
+                Console.WriteLine(cooldown);
             } else
             {
+                //remove one life crystal from the player, decreasing there max hp
                 Player.ConsumedLifeCrystals--;
-                timer = timerMax;
+
+                //reset the cooldown
+                cooldown = cooldownMax;
             }
             base.PostUpdate();
         }
