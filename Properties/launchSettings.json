@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Terraria": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "$(tMLPath) -skipselect \"tester:test\"",
+      "workingDirectory": "$(tMLSteamPath)"
+    },
+    "TerrariaServer": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "$(tMLServerPath) -world \"C:\\Users\\Owner\\Documents\\My Games\\Terraria\\tModLoader\\Worlds\\test.wld\" -port 7777 -players 16",
+      "workingDirectory": "$(tMLSteamPath)"
+    }
+  }
+}

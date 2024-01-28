@@ -1,0 +1,3 @@
+displayName = Slowly Lose Max HP
+author = First Fractal
+version = 0.1
