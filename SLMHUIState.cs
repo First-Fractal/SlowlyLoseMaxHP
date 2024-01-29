@@ -1,22 +1,21 @@
-﻿using System;
+﻿using System.Reflection;
 using Terraria;
-using Terraria.ModLoader;
+using Terraria.ID;
 using Terraria.UI;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
+using Terraria.Audio;
 using Terraria.UI.Chat;
+using Terraria.GameContent;
 using Terraria.Localization;
 using ReLogic.Graphics;
-using Terraria.GameInput;
-using Terraria.ModLoader.IO;
-using Terraria.Audio;
-using Terraria.ID;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace SlowlyLoseMaxHP
 {
+    //NOTE THAT SOME PARTS OF THIS FILE WAS INSPIRED BY (AND COPY AND PASTED FROM) https://github.com/NotLe0n/AnglerShop/blob/1.4.4/src/AnglerShopUI.cs
     internal class SLMHUIState : UIState
     {
+        private static object TextDisplayCache => typeof(Main).GetField("_textDisplayCache", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Main.instance);
         bool focused = false;
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -29,8 +28,19 @@ namespace SlowlyLoseMaxHP
             //set the scale for the text
             Vector2 scale = new Vector2(0.9f);
 
+            
+
+            //get the number of lines that the npc said
+            int numLines = (int)TextDisplayCache.GetType().GetProperty("AmountOfLines", BindingFlags.Instance | BindingFlags.Public).GetValue(TextDisplayCache);
+
+            //save the positions of all 4 buttons 
+            float posButton1 = 180 + (Main.screenWidth - 780) / 2;
+            float posButton2 = posButton1 + ChatManager.GetStringSize(FontAssets.MouseText.Value, Language.GetTextValue("LegacyInterface.64"), scale).X + 30f; // Position of the second button (Close)
+            float posButton3 = posButton2 + ChatManager.GetStringSize(FontAssets.MouseText.Value, Language.GetTextValue("LegacyInterface.52"), scale).X + 30f; // Position of the third button (Happiness)
+            float posButton4 = posButton3 + ChatManager.GetStringSize(FontAssets.MouseText.Value, Language.GetTextValue("UI.NPCCheckHappiness"), scale).X + 30f; // Position of the new button
+
             //set the position of the text
-            Vector2 pos = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2 - 40);
+            Vector2 pos = new(posButton4, 143 + numLines * 31);
 
             //get the text size
             Vector2 textSize = ChatManager.GetStringSize(font, text, scale);
