@@ -19,6 +19,10 @@ namespace SlowlyLoseMaxHP
         bool focused = false;
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //prevent drawing the text if the shop is opened
+            if (Main.npcChatText == string.Empty)
+                return;
+
             //get the current language version of Shop
             string text = Language.GetTextValue("LegacyInterface.28");
 
@@ -81,6 +85,27 @@ namespace SlowlyLoseMaxHP
                 0f, textSize/2, scale);
 
             base.Draw(spriteBatch);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            //if the player left click on the shop, then the shop will open
+            if (focused && Main.mouseLeft)
+                OpenShop();
+            base.Update(gameTime);
+        }
+
+        //I may or may not gotten a bit lazy here, and borrow (stole) this function from the source, and only replace one word
+        // copied from Main.OpenShop (except the line with the comment)
+        internal static void OpenShop()
+        {
+            Main.playerInventory = true;
+            Main.stackSplit = 9999;
+            Main.npcChatText = "";
+            Main.SetNPCShopIndex(1);
+            //Main.instance.shop[Main.npcShop].SetupShop(shopIndex);
+            Main.instance.shop[Main.npcShop].SetupShop("Terraria/Nurse/Shop", Main.LocalPlayer.TalkNPC); // Setup Angler shop (gets filled in ModifyShops.cs) 
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
     }
 }
