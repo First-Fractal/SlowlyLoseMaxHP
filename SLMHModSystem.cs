@@ -13,7 +13,6 @@ namespace SlowlyLoseMaxHP
     {
         internal UserInterface nurseInterface;
         internal SLMHUIState nurseUI;
-        private GameTime lastGameTime;
         public override void Load()
         {
             //load in the interface for the nurse shop
