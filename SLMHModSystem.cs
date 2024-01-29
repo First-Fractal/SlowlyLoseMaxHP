@@ -4,6 +4,8 @@ using Terraria.UI;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using Humanizer;
+using Terraria.ID;
 
 namespace SlowlyLoseMaxHP
 {
@@ -24,7 +26,11 @@ namespace SlowlyLoseMaxHP
         //update the UI tick counter on every tick
         public override void UpdateUI(GameTime gameTime)
         {
-            nurseInterface?.Update(gameTime);
+            // if the player is talking to the Angler and the new shop isn't opened
+            if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.Nurse && Main.npcShop != 99)
+            {
+                nurseInterface.Update(gameTime);
+            }
         }
 
 
@@ -35,9 +41,10 @@ namespace SlowlyLoseMaxHP
             if (resourceBarIndex != -1)
             {
                 layers.Insert(resourceBarIndex, new LegacyGameInterfaceLayer(
-                    "ExampleMod: Example Resource Bar",
+                    "SlowlyLoseMaxHP: Nurse Shop",
                     delegate {
-                        nurseInterface.Draw(Main.spriteBatch, new GameTime());
+                        if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.Nurse && Main.npcShop != 99)
+                            nurseInterface.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
                     InterfaceScaleType.UI)

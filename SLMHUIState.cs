@@ -10,6 +10,8 @@ using Terraria.Localization;
 using ReLogic.Graphics;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace SlowlyLoseMaxHP
 {
@@ -41,12 +43,20 @@ namespace SlowlyLoseMaxHP
             //check if the mouse is hovering above the hitbox
             if (Main.MouseScreen.Between(hitboxPos, hitboxPos + hitboxOffset))
             {
+                //play the sfx once
+                if (!focused)
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+
                 focused = true;
-                
+
                 //increase the scale to help show that the text is being hovered
                 scale *= 1.1f;
             } else
             {
+                //play the sfx once
+                if (focused)
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+
                 focused = false;
             }
 
