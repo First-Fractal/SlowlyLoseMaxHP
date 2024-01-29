@@ -8,11 +8,14 @@ using Terraria.GameContent;
 using Terraria.UI.Chat;
 using Terraria.Localization;
 using ReLogic.Graphics;
+using Terraria.GameInput;
+using Terraria.ModLoader.IO;
 
 namespace SlowlyLoseMaxHP
 {
     internal class SLMHUIState : UIState
     {
+        bool focused = false;
         public override void Draw(SpriteBatch spriteBatch)
         {
             //get the current language version of Shop
@@ -27,15 +30,35 @@ namespace SlowlyLoseMaxHP
             //set the position of the text
             Vector2 pos = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2 - 40);
 
+            //get the text size
+            Vector2 textSize = ChatManager.GetStringSize(font, text, scale);
+
+            //set the hitbox for the text
+            Vector2 hitboxPos = pos - textSize/2 * scale - new Vector2 (2, 2);
+            Vector2 hitboxOffset = textSize * scale;
+            hitboxOffset.X += textSize.X/7 * scale.X + 4;
+
+            //check if the mouse is hovering above the hitbox
+            if (Main.MouseScreen.Between(hitboxPos, hitboxPos + hitboxOffset))
+            {
+                focused = true;
+                
+                //increase the scale to help show that the text is being hovered
+                scale *= 1.1f;
+            } else
+            {
+                focused = false;
+            }
+
             // draw button text shadow
-            ChatManager.DrawColorCodedStringShadow(spriteBatch: spriteBatch, font, text,
-                pos, Color.Black,
-                0f, ChatManager.GetStringSize(font, text, scale) / 2, scale);
+            ChatManager.DrawColorCodedStringShadow(spriteBatch: spriteBatch, font, text, pos,
+                (!focused) ? Color.Black : Color.Brown, 
+                0f, textSize/2, scale);
 
             //draw the text
-            ChatManager.DrawColorCodedString(spriteBatch: spriteBatch, font, text,
-                pos, new Color(228, 206, 114, Main.mouseTextColor / 2),
-                0f, ChatManager.GetStringSize(font, text, scale)/2, scale);
+            ChatManager.DrawColorCodedString(spriteBatch: spriteBatch, font, text, pos, 
+                (!focused) ? new Color(228, 206, 114, Main.mouseTextColor / 2) : new Color(255, 231, 69),
+                0f, textSize/2, scale);
 
             base.Draw(spriteBatch);
         }
