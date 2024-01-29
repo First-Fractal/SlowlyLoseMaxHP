@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using Terraria.UI;
 using Terraria;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 
 namespace SlowlyLoseMaxHP
 {
+    //make it only load in on the client side
+    [Autoload(Side = ModSide.Client)]
     internal class SLMHModSystem : ModSystem
     {
         internal UserInterface nurseInterface;
@@ -14,43 +16,35 @@ namespace SlowlyLoseMaxHP
         private GameTime lastGameTime;
         public override void Load()
         {
-            if (!Main.dedServ)
-            {
-                nurseInterface = new UserInterface();
-                nurseUI = new SLMHUIState();
-                nurseUI.Activate();
-            }
+            //load in the interface for the nurse shop
+            nurseInterface = new UserInterface();
+            nurseUI = new SLMHUIState();
+            nurseInterface.SetState(nurseUI);
         }
 
+        //update the UI tick counter on every tick
         public override void UpdateUI(GameTime gameTime)
         {
-            lastGameTime = gameTime;
-            if (nurseInterface?.CurrentState != null)
-            {
-                nurseInterface.Update(gameTime);
-            }
-
-            nurseInterface?.SetState(nurseUI);
-            base.UpdateUI(gameTime);
+            nurseInterface?.Update(gameTime);
         }
 
+
+        //load in the UI
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (mouseTextIndex != -1)
+            int resourceBarIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
+            if (resourceBarIndex != -1)
             {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "Boss Adrenaline Counter",
-                    delegate
-                    {
-                        if (lastGameTime != null && nurseInterface?.CurrentState != null)
-                        {
-                            nurseInterface.Draw(Main.spriteBatch, lastGameTime);
-                        }
+                layers.Insert(resourceBarIndex, new LegacyGameInterfaceLayer(
+                    "ExampleMod: Example Resource Bar",
+                    delegate {
+                        nurseInterface.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
-                    InterfaceScaleType.UI));
+                    InterfaceScaleType.UI)
+                );
             }
+
             base.ModifyInterfaceLayers(layers);
         }
     }
