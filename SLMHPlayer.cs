@@ -2,13 +2,14 @@
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using Terraria.Localization;
 
 namespace SlowlyLoseMaxHP
 {
     public class SLMHPlayer : ModPlayer
     {
         //vars for counting down the cooldown for losing max hp
-        static int cooldownMax = ffFunc.TimeToTick(0, 5);
+        static int cooldownMax = ffFunc.TimeToTick(5);
         static int cooldown = cooldownMax;
         static bool bossAlive = false;
 
@@ -25,7 +26,7 @@ namespace SlowlyLoseMaxHP
                     cooldown = cooldownMax;
 
                     //tell the player that the boss is going to suck up there life at a faster rate then before.
-                    string message = "Hey, the boss that is currently alive is going to suck up your max HP at a faster rate then before.";
+                    string message = Language.GetTextValue("Mods.SlowlyLoseMaxHP.Chat.BossSpawn");
                     ffFunc.Talk(message, Color.Orange);
                     bossAlive = true;
                }
@@ -39,7 +40,7 @@ namespace SlowlyLoseMaxHP
                     cooldown = cooldownMax;
 
                     //tell the player that the boss is gone, and the max HP lose rate has gone back to normal
-                    string message = "Hey, the boss is gone. The max HP lose rate has gone back to normal.";
+                    string message = Language.GetTextValue("Mods.SlowlyLoseMaxHP.Chat.BossDespawn");
                     ffFunc.Talk(message, Color.Orange);
                     bossAlive = false;
                 }
@@ -65,7 +66,7 @@ namespace SlowlyLoseMaxHP
                     Player.ConsumedLifeFruit--;
 
                     //tell the player that they just lost 20 max hp
-                    CombatText.NewText(new Rectangle((int)Player.position.X, (int)Player.position.Y, 20, 20), Color.Yellow, "You just lost 20 max HP!");
+                    CombatText.NewText(new Rectangle((int)Player.position.X, (int)Player.position.Y, 20, 20), Color.Yellow, Language.GetTextValue("Mods.SlowlyLoseMaxHP.Chat.MissingHP", "20"));
                 }
                 //check if the player has one life crystal
                 else if (Player.ConsumedLifeCrystals > 0)
@@ -74,7 +75,7 @@ namespace SlowlyLoseMaxHP
                     Player.ConsumedLifeCrystals--;
 
                     //tell the player that they just lost 20 max hp
-                    CombatText.NewText(new Rectangle((int)Player.position.X, (int)Player.position.Y, 20, 20), Color.Red, "You just lost 20 max HP!");
+                    CombatText.NewText(new Rectangle((int)Player.position.X, (int)Player.position.Y, 20, 20), Color.Red, Language.GetTextValue("Mods.SlowlyLoseMaxHP.Chat.MissingHP", "20"));
                 }
 
                 //reset the cooldown

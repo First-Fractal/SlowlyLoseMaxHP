@@ -1,1 +1,5 @@
-
+Chat: {
+	BossSpawn: Hey, the boss that is currently alive is going to suck up your max HP at a faster rate then before.
+	BossDespawn: Hey, the boss is gone. The max HP lose rate has gone back to normal.
+	MissingHP: You just lost {0} max HP!
+}
