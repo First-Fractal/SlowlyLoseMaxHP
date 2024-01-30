@@ -1,5 +1,79 @@
 Chat: {
-	BossSpawn: Hey, the boss that is currently alive is going to suck up your max HP at a faster rate then before.
-	BossDespawn: Hey, the boss is gone. The max HP lose rate has gone back to normal.
+	BossSpawn: Careful, that boss just changed your max HP loss rate, so be careful.
+	BossDespawn: With the boss gone, the max HP loss rate has returned to normal.
 	MissingHP: You just lost {0} max HP!
+}
+
+Configs: {
+	SLMHConfig: {
+		DisplayName: Slowly Lose Max HP Config
+
+		Headers: {
+			LifeOptions: Life Options
+			CooldownOptions: Cooldown Options
+			NurseOptions: Nurse Options
+		}
+
+		lifeCrystalRemove: {
+			Label: Life Crystal Remove
+			Tooltip: The amount of life crystal the game will remove, if any was consumed.
+		}
+
+		lifeFruitRemove: {
+			Label: Life Fruit Remove
+			Tooltip: The amount of life fruit the game will remove, if any was consumed.
+		}
+
+		generalCooldown: {
+			Label: Cooldown:
+			Tooltip: The cooldown for how long it will take to remove a life crystal/fruit.
+		}
+
+		generalCooldownMinute: {
+			Label: Cooldown Minute?
+			Tooltip:
+				'''
+				If true, then the previous value will be set to minute.
+				If false, then it will be used as seconds.
+				'''
+		}
+
+		bossChangeCooldown: {
+			Label: Should Boss Change Cooldown?
+			Tooltip: If true, then any boss will change the cooldown to the values below.
+		}
+
+		bossCooldown: {
+			Label: Boss Cooldown?
+			Tooltip: What should the cooldown be when there is a boss alive?
+		}
+
+		bossCooldownMinute: {
+			Label: Boss Cooldown Minute?
+			Tooltip:
+				'''
+				If true, then the previous value will be set to minute.
+				If false, then it will be used as seconds.
+				'''
+		}
+
+		nurseSellLifeItems: {
+			Label: Nurse Sell Life Items?
+			Tooltip:
+				'''
+				If true, then the nurse will sell life crystal after slaying the evil boss, 
+				and a life crystal after slaying Plantera.
+				'''
+		}
+
+		lifeCrystalMulti: {
+			Label: Life Crystal Price Multiplier
+			Tooltip: How much should the price of life crystal should be modified by.
+		}
+
+		lifeFruitMulti: {
+			Label: Life Fruit Price Multiplier
+			Tooltip: How much should the price of life fruit should be modified by.
+		}
+	}
 }

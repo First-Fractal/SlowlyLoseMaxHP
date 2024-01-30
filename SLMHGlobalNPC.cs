@@ -15,11 +15,11 @@ namespace SlowlyLoseMaxHP
 
             //if the EoW or BoC is defeated, then sell the life crystal for 10 gold
             if (NPC.downedBoss2)
-                items[0] = new Item(ItemID.LifeCrystal) { shopCustomPrice = 100000 };
+                items[0] = new Item(ItemID.LifeCrystal) { shopCustomPrice = Item.sellPrice(0, 10, 0, 0) };
 
             //if Plantera is defeated, then sell the life fruit for 2.5 gold
             if (NPC.downedPlantBoss)
-                items[1] = new Item(ItemID.LifeFruit) { shopCustomPrice = 25000 };
+                items[1] = new Item(ItemID.LifeFruit) { shopCustomPrice = Item.sellPrice(0, 2, 50, 0) };
         }
     }
 }
