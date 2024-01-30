@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace SlowlyLoseMaxHP
@@ -62,38 +60,5 @@ namespace SlowlyLoseMaxHP
         [DrawTicks()]
         [Slider()]
         public float lifeFruitMulti;
-
-        //[DefaultValue(0)]
-        //[Range(0, 99)]
-        //public int LifeCrystalCopper;
-
-        //[DefaultValue(0)]
-        //[Range(0, 99)]
-        //public int LifeCrystalSliver;
-
-        //[DefaultValue(10)]
-        //[Range(0, 99)]
-        //public int LifeCrystalGold;
-
-        //[DefaultValue(0)]
-        //[Range(0, 99)]
-        //public int LifeCrystalPlat;
-
-
-        //[DefaultValue(0)]
-        //[Range(0, 99)]
-        //public int LifeFruitCopper;
-
-        //[DefaultValue(50)]
-        //[Range(0, 99)]
-        //public int LifeFruitSliver;
-
-        //[DefaultValue(2)]
-        //[Range(0, 99)]
-        //public int LifeFruitGold;
-
-        //[DefaultValue(0)]
-        //[Range(0, 99)]
-        //public int LifeFruitPlat;
     }
 }
