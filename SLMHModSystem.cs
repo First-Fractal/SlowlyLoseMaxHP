@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria.UI;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using Humanizer;
 using Terraria.ID;
 
 namespace SlowlyLoseMaxHP

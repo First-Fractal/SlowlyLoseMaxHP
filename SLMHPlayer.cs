@@ -8,11 +8,46 @@ namespace SlowlyLoseMaxHP
     public class SLMHPlayer : ModPlayer
     {
         //vars for counting down the cooldown for losing max hp
-        static int cooldownMax = ffFunc.TimeToTick(1);
+        static int cooldownMax = ffFunc.TimeToTick(0, 5);
         static int cooldown = cooldownMax;
+        static bool bossAlive = false;
 
         public override void PostUpdate()
         {
+            //decrease the cooldown if a boss is alive, and reset it if not
+            if (ffFunc.IsBossAlive())
+            {
+                //only set this stuff once
+               if (!bossAlive)
+               {
+                    //lower down the timer
+                    cooldownMax = ffFunc.TimeToTick(20);
+                    cooldown = cooldownMax;
+
+                    //tell the player that the boss is going to suck up there life at a faster rate then before.
+                    string message = "Hey, the boss that is currently alive is going to suck up your max HP at a faster rate then before.";
+                    ffFunc.Talk(message, Color.Orange);
+                    bossAlive = true;
+               }
+            } 
+            else 
+            {
+                if (bossAlive)
+                {
+                    //reset the timer to back to normal
+                    cooldownMax = ffFunc.TimeToTick(0, 5);
+                    cooldown = cooldownMax;
+
+                    //tell the player that the boss is gone, and the max HP lose rate has gone back to normal
+                    string message = "Hey, the boss is gone. The max HP lose rate has gone back to normal.";
+                    ffFunc.Talk(message, Color.Orange);
+                    bossAlive = false;
+                }
+            }
+
+            //clamp the cooldown to be inside 0 and max cooldown
+            cooldown = Math.Clamp(cooldown, 0, cooldownMax);
+
             //count down the cooldown
             if (cooldown > 0)
             {

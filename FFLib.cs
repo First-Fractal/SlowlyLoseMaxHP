@@ -83,17 +83,21 @@ namespace SlowlyLoseMaxHP
         //function for checking if a boss is currently alive
         public static bool IsBossAlive()
         {
+            //loop through each npc in the game
             foreach (NPC npc in Main.npc)
             {
-                if (npc.boss == true)
+                //check if the npc is alive and is a boss
+                if (npc.active && npc.boss)
                 {
                     return true;
                 }
                 else
                 {
+                    //loop through each part of the boss parts
                     foreach (int part in ffVar.BossParts)
                     {
-                        if (npc.type == part)
+                        //check if the npc is alive and is a part of a boss
+                        if (npc.active && npc.type == part)
                         {
                             return true;
                         }
