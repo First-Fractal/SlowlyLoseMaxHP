@@ -1,55 +1,89 @@
-﻿using System.Collections.Generic;
-using Terraria.UI;
+﻿using System;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 
 namespace SlowlyLoseMaxHP
 {
-    //make it only load in on the client side
-    [Autoload(Side = ModSide.Client)]
     internal class SLMHModSystem : ModSystem
     {
-        internal UserInterface nurseInterface;
-        internal SLMHUIState nurseUI;
-        public override void Load()
-        {
-            //load in the interface for the nurse shop
-            nurseInterface = new UserInterface();
-            nurseUI = new SLMHUIState();
-            nurseInterface.SetState(nurseUI);
-        }
+        //vars for counting down the cooldown for losing max hp
+        public static int cooldownMax = ffFunc.TimeToTick(0, 5);
+        public static int cooldown = cooldownMax;
+        public static bool bossAlive = false;
 
-        //update the UI tick counter on every tick
-        public override void UpdateUI(GameTime gameTime)
+        public override void PostUpdateWorld()
         {
-            //if the player is talking to the nurse and the new shop isn't opened, and they want the nurse to have a shop
-            if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.Nurse && Main.npcShop != 99 && SLMHConfig.Instance.nurseSellLifeItems) 
+            //change the cooldown if a boss is alive and the config allows it, and reset it if not
+            if (ffFunc.IsBossAlive() && SLMHConfig.Instance.bossChangeCooldown)
             {
-                nurseInterface.Update(gameTime);
+                //update the max cooldown based on the new time from the boss
+                if (SLMHConfig.Instance.bossCooldownMinute)
+                    cooldownMax = ffFunc.TimeToTick(0, SLMHConfig.Instance.bossCooldown);
+                else
+                    cooldownMax = ffFunc.TimeToTick(SLMHConfig.Instance.bossCooldown);
+
+                //only set this stuff once
+                if (!bossAlive)
+                {
+                    //reset the cooldown
+                    cooldown = cooldownMax;
+
+                    //tell the player that the boss is going to suck up there life at a faster rate then before.
+                    string message = Language.GetTextValue("Mods.SlowlyLoseMaxHP.Chat.BossSpawn");
+                    Main.NewText(message, Color.Orange);
+                    bossAlive = true;
+                }
             }
-        }
-
-
-        //load in the UI. I think, I have no idea what's going on here.
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int resourceBarIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
-            if (resourceBarIndex != -1)
+            else
             {
-                layers.Insert(resourceBarIndex, new LegacyGameInterfaceLayer(
-                    "SlowlyLoseMaxHP: Nurse Shop",
-                    delegate {
-                        if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.Nurse && Main.npcShop != 99 && SLMHConfig.Instance.nurseSellLifeItems)
-                            nurseInterface.Draw(Main.spriteBatch, new GameTime());
-                        return true;
-                    },
-                    InterfaceScaleType.UI)
-                );
+                //update the max cooldown based on the new time
+                if (SLMHConfig.Instance.generalCooldownMinute)
+                    cooldownMax = ffFunc.TimeToTick(0, SLMHConfig.Instance.generalCooldown);
+                else
+                    cooldownMax = ffFunc.TimeToTick(SLMHConfig.Instance.generalCooldown);
+
+                if (bossAlive)
+                {
+                    //reset the cooldown
+                    cooldown = cooldownMax;
+
+                    //tell the player that the boss is gone, and the max HP lose rate has gone back to normal
+                    string message = Language.GetTextValue("Mods.SlowlyLoseMaxHP.Chat.BossDespawn");
+                    Main.NewText(message, Color.Orange);
+                    bossAlive = false;
+                }
             }
 
-            base.ModifyInterfaceLayers(layers);
+            //count down the cooldown and reset it when it hit 0
+            if (cooldown > 0)
+            {
+                cooldown--;
+            } else
+            {
+                cooldown = cooldownMax;
+            }
+
+            //clamp the cooldown to be inside 0 and max cooldown
+            cooldown = Math.Clamp(cooldown, 0, cooldownMax);
+
+            //send the cooldown info from here to all of the player(s)
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                ModPacket packet = ModContent.GetInstance<SlowlyLoseMaxHP>().GetPacket();
+                packet.Write(cooldownMax);
+                packet.Write(cooldown);
+                packet.Send();
+            } else
+            {
+                SLMHPlayer player = Main.LocalPlayer.GetModPlayer<SLMHPlayer>();
+                player.cooldownMax = cooldownMax;
+                player.cooldown = cooldown;
+            }
+
+            base.PostUpdateWorld();
         }
     }
 }
