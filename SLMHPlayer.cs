@@ -17,8 +17,6 @@ namespace SlowlyLoseMaxHP
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.NewText(cooldown);
-
                 //check if the cooldown is at 0
                 if(cooldown == 0)
                 {
