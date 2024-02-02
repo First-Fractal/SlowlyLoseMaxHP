@@ -107,5 +107,25 @@ namespace SlowlyLoseMaxHP
             }
             return false;
         }
+
+        //function for checking if someone is in the world, and/or if they are also alive
+        public static bool IsPlayerInWorld(bool checkDead = false)
+        {
+            //loop through each player
+            foreach (Player player in Main.player)
+            {
+                //check if the current player is alive
+                if (player.active)
+                {
+                    //check if it also needs to check if the player is alive
+                    if (checkDead && !player.dead)
+                        return true;
+                    else
+                        return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -57,8 +57,8 @@ namespace SlowlyLoseMaxHP
                 }
             }
 
-            //count down the cooldown and reset it when it hit 0
-            if (cooldown > 0)
+            //count down the cooldown when there is an active player and reset it when it hit 0
+            if (ffFunc.IsPlayerInWorld() && cooldown > 0)
             {
                 cooldown--;
             } else
