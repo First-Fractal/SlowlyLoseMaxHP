@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
+using Terraria.Localization;
 
 namespace SlowlyLoseMaxHP
 {
@@ -13,12 +14,33 @@ namespace SlowlyLoseMaxHP
     {
         internal UserInterface nurseInterface;
         internal SLMHUIState nurseUI;
+        internal static bool dialogueTweakLoaded = false;
+
         public override void Load()
         {
             //load in the interface for the nurse shop
             nurseInterface = new UserInterface();
             nurseUI = new SLMHUIState();
             nurseInterface.SetState(nurseUI);
+        }
+
+
+        //I may or may not gotten a bit lazy here, and borrow (stole) this function from the source, and only replace a few words
+        public override void PostSetupContent()
+        {
+            if (ModLoader.TryGetMod("DialogueTweak", out Mod dialogueTweak))
+            {
+                dialogueTweakLoaded = true;
+                dialogueTweak.Call("AddButton",
+                    NPCID.Nurse, // NPC ID
+                    () => Language.GetTextValue("LegacyInterface.28"),
+                    "DialogueTweak/Interfaces/Assets/Icon_Default", // The texture's path
+                    () =>
+                    {
+                        if (Main.mouseLeft)
+                            SLMHUIState.OpenShop();
+                    });
+            }
         }
 
         //update the UI tick counter on every tick
@@ -41,7 +63,7 @@ namespace SlowlyLoseMaxHP
                 layers.Insert(resourceBarIndex, new LegacyGameInterfaceLayer(
                     "SlowlyLoseMaxHP: Nurse Shop",
                     delegate {
-                        if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.Nurse && Main.npcShop != 99 && SLMHConfig.Instance.nurseSellLifeItems)
+                        if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.Nurse && Main.npcShop != 99 && SLMHConfig.Instance.nurseSellLifeItems && !dialogueTweakLoaded)
                             nurseInterface.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
