@@ -37,7 +37,7 @@ namespace SlowlyLoseMaxHP
         [DefaultValue(true)]
         public bool bossChangeCooldown;
 
-        [DefaultValue(20)]
+        [DefaultValue(40)]
         public int bossCooldown;
 
         [DefaultValue(false)]
